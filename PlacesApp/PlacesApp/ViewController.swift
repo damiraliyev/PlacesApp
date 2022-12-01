@@ -29,8 +29,9 @@ class ViewController: UIViewController {
         return view
     }()
     
-    let coordinates: CLLocationCoordinate2D = CLLocationCoordinate2D()
-
+    var pinTitle = ""
+    var pinSubtitle = ""
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -92,16 +93,53 @@ class ViewController: UIViewController {
         
         print("Pressed")
         
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-        annotation.title = "Kyzylorda"
-        annotation.subtitle = "Central square"
-        mapView.addAnnotation(annotation)
+        showAlertController { [weak self] isAdded in
+            if isAdded {
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                annotation.title = self!.pinTitle
+                annotation.subtitle = self!.pinSubtitle
+                self!.mapView.addAnnotation(annotation)
+         
+            }
+        
+           
+
+        }
         
         
+       
         
     }
     
+    func showAlertController(completion:@escaping (_ isAdded: Bool)->Void){
+        let alertController = UIAlertController(title: "Add place", message: "Fill the all fields", preferredStyle: .alert)
+        var isAdded = false
+        let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
+            isAdded = true
+            self!.pinTitle = alertController.textFields![0].text ?? ""
+            self!.pinSubtitle = alertController.textFields![1].text ?? ""
+
+            completion(isAdded)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {_ in
+            isAdded = false
+            completion(isAdded)
+        }
+        
+        alertController.addTextField {titleTextField in
+            titleTextField.placeholder = "Enter the title"
+        }
+        
+        alertController.addTextField {subTitleTextField in
+            subTitleTextField.placeholder = "Enter the subtitle"
+        }
+        
+        alertController.addAction(addAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true)
+
+    }
     
     func layout() {
         view.addSubview(mapView)
