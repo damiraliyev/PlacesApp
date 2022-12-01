@@ -44,7 +44,8 @@ class ViewController: UIViewController {
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
-        annotation.title = "A"
+        annotation.title = "Kyzylorda"
+        annotation.subtitle = "Central square"
         mapView.addAnnotation(annotation)
         
     }
@@ -54,7 +55,7 @@ class ViewController: UIViewController {
         view.addSubview(mapView)
         
         NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -71,18 +72,22 @@ extension ViewController: MKMapViewDelegate {
         if annotation is MKUserLocation { return nil }
 
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin") as? MKPinAnnotationView
+        let detailButton = UIButton(type: .detailDisclosure)
 
         if annotationView == nil {
 
             annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
 
             annotationView?.animatesDrop = true
-
-//            annotationView?.canShowCallout = false
-
+            annotationView?.canShowCallout = true
+            annotationView?.rightCalloutAccessoryView = detailButton
+          
         } else {
 
             annotationView?.annotation = annotation
+            
+            
+            
 
         }
         
