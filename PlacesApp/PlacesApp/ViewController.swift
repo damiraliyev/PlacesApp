@@ -44,7 +44,7 @@ class ViewController: UIViewController {
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
-//        annotation.ima
+        annotation.title = "A"
         mapView.addAnnotation(annotation)
         
     }
@@ -66,23 +66,28 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: MKMapViewDelegate {
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//        if annotation is MKUserLocation {
-//            return nil
-//        }
-//        
-//        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin")
-//        
-//        if annotationView == nil {
-//            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "pin")
-//        } else {
-//            annotationView?.annotation = annotation
-//        }
-////
-////        annotationView?.image = UIImage(systemName: "mappin")
-////        annotationView?.tintColor = .blue
-//    
-//        
-//        return annotationView
-//    }
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+
+        if annotation is MKUserLocation { return nil }
+
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin") as? MKPinAnnotationView
+
+        if annotationView == nil {
+
+            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+
+            annotationView?.animatesDrop = true
+
+//            annotationView?.canShowCallout = false
+
+        } else {
+
+            annotationView?.annotation = annotation
+
+        }
+        
+       
+        return annotationView
+
+    }
 }
