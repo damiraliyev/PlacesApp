@@ -28,6 +28,8 @@ class ViewController: UIViewController {
         
         return view
     }()
+    
+    let coordinates: CLLocationCoordinate2D = CLLocationCoordinate2D()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,11 +70,25 @@ class ViewController: UIViewController {
         segmententedControl.insertSegment(withTitle: "Sattelite", at: 1, animated: true)
         segmententedControl.insertSegment(withTitle: "Hybrid", at: 2, animated: true)
         segmententedControl.backgroundColor = .white
+        segmententedControl.selectedSegmentIndex = 0
+        
+        segmententedControl.addTarget(self, action: #selector(segmentChosen), for: .primaryActionTriggered)
+    }
+    
+    @objc func segmentChosen(_ sender: UISegmentedControl) {
+        switch segmententedControl.selectedSegmentIndex {
+        case 0: mapView.mapType = MKMapType.standard
+        case 1: mapView.mapType = MKMapType.satellite
+        case 2: mapView.mapType = MKMapType.hybrid
+        default:
+            print("Something went wrong")
+        }
     }
     
     @objc func handleTap(gestureReconizer: UITapGestureRecognizer) {
         let location = gestureReconizer.location(in: mapView)
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+        
         
         print("Pressed")
         
@@ -81,6 +97,8 @@ class ViewController: UIViewController {
         annotation.title = "Kyzylorda"
         annotation.subtitle = "Central square"
         mapView.addAnnotation(annotation)
+        
+        
         
     }
     
