@@ -16,6 +16,18 @@ class ViewController: UIViewController {
         
         return map
     }()
+    
+    let segmententedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl()
+        
+        return segmentedControl
+    }()
+    
+    let containerView: UIView = {
+        let view = UIView()
+        
+        return view
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,11 +41,33 @@ class ViewController: UIViewController {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.delegate = self
         setupTapGesture()
+    
+        setupContainerView()
+        
+        setupSegments()
+        
     }
     
     func setupTapGesture() {
         let longPressTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleTap))
         mapView.addGestureRecognizer(longPressTapGesture)
+    }
+    
+    func setupContainerView() {
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = containerView.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        containerView.addSubview(blurEffectView)
+    }
+    
+    func setupSegments() {
+        segmententedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmententedControl.insertSegment(withTitle: "Standard", at: 0, animated: true)
+        segmententedControl.insertSegment(withTitle: "Sattelite", at: 1, animated: true)
+        segmententedControl.insertSegment(withTitle: "Hybrid", at: 2, animated: true)
+        segmententedControl.backgroundColor = .white
     }
     
     @objc func handleTap(gestureReconizer: UITapGestureRecognizer) {
@@ -53,6 +87,8 @@ class ViewController: UIViewController {
     
     func layout() {
         view.addSubview(mapView)
+        view.addSubview(containerView)
+        view.addSubview(segmententedControl)
         
         NSLayoutConstraint.activate([
             mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -61,6 +97,19 @@ class ViewController: UIViewController {
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        NSLayoutConstraint.activate([
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: view.frame.size.width / 5)
+        ])
+        
+        NSLayoutConstraint.activate([
+            segmententedControl.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            segmententedControl.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        ])
+        
+       
     }
 
 
@@ -85,10 +134,6 @@ extension ViewController: MKMapViewDelegate {
         } else {
 
             annotationView?.annotation = annotation
-            
-            
-            
-
         }
         
        
