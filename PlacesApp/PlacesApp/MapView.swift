@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 
 
-class ViewController: UIViewController {
+class MapView: UIViewController {
     
     let mapView: MKMapView = {
         let map = MKMapView()
@@ -29,6 +29,9 @@ class ViewController: UIViewController {
         return view
     }()
     
+    let tableView = UITableView()
+    
+    
     var pinTitle = ""
     var pinSubtitle = ""
  
@@ -37,25 +40,39 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         setup()
         layout()
+       
     }
     
     
     func setup() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.delegate = self
-        setupTapGesture()
+//        setupTapGesture()
     
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: nil)
+        
         setupContainerView()
         
         setupSegments()
         
+        setupTableView()
+        
+//        setupTapGesture()
+        
     }
     
-    func setupTapGesture() {
-        let longPressTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleTap))
-        mapView.addGestureRecognizer(longPressTapGesture)
+    func setupTableView() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        
     }
     
+//    func setupTapGesture() {
+//        let longPressTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleTap))
+//        mapView.addGestureRecognizer(longPressTapGesture)
+//    }
+//
     func setupContainerView() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         let blurEffect = UIBlurEffect(style: .light)
@@ -73,73 +90,70 @@ class ViewController: UIViewController {
         segmententedControl.backgroundColor = .white
         segmententedControl.selectedSegmentIndex = 0
         
-        segmententedControl.addTarget(self, action: #selector(segmentChosen), for: .primaryActionTriggered)
+//        segmententedControl.addTarget(self, action: #selector(segmentChosen), for: .primaryActionTriggered)
     }
     
-    @objc func segmentChosen(_ sender: UISegmentedControl) {
-        switch segmententedControl.selectedSegmentIndex {
-        case 0: mapView.mapType = MKMapType.standard
-        case 1: mapView.mapType = MKMapType.satellite
-        case 2: mapView.mapType = MKMapType.hybrid
-        default:
-            print("Something went wrong")
-        }
-    }
+//    @objc func segmentChosen(_ sender: UISegmentedControl) {
+//        switch segmententedControl.selectedSegmentIndex {
+//        case 0: mapView.mapType = MKMapType.standard
+//        case 1: mapView.mapType = MKMapType.satellite
+//        case 2: mapView.mapType = MKMapType.hybrid
+//        default:
+//            print("Something went wrong")
+//        }
+//    }
     
-    @objc func handleTap(gestureReconizer: UITapGestureRecognizer) {
-        let location = gestureReconizer.location(in: mapView)
-        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
-        
-        
-        print("Pressed")
-        
-        showAlertController { [weak self] isAdded in
-            if isAdded {
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                annotation.title = self!.pinTitle
-                annotation.subtitle = self!.pinSubtitle
-                self!.mapView.addAnnotation(annotation)
-         
-            }
-        
-           
-
-        }
-        
-        
-       
-        
-    }
+//    @objc func handleTap(gestureReconizer: UITapGestureRecognizer) {
+//        let location = gestureReconizer.location(in: mapView)
+//        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+//        
+//        showAlertController { [weak self] isAdded in
+//            if isAdded {
+//                let annotation = MKPointAnnotation()
+//                annotation.coordinate = coordinate
+//                annotation.title = self!.pinTitle
+//                annotation.subtitle = self!.pinSubtitle
+//                self!.mapView.addAnnotation(annotation)
+//                self!.title = self!.pinTitle
+//            }
+//        
+//           
+//
+//        }
+//        
+//        
+//       
+//        
+//    }
     
-    func showAlertController(completion:@escaping (_ isAdded: Bool)->Void){
-        let alertController = UIAlertController(title: "Add place", message: "Fill the all fields", preferredStyle: .alert)
-        var isAdded = false
-        let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
-            isAdded = true
-            self!.pinTitle = alertController.textFields![0].text ?? ""
-            self!.pinSubtitle = alertController.textFields![1].text ?? ""
-
-            completion(isAdded)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {_ in
-            isAdded = false
-            completion(isAdded)
-        }
-        
-        alertController.addTextField {titleTextField in
-            titleTextField.placeholder = "Enter the title"
-        }
-        
-        alertController.addTextField {subTitleTextField in
-            subTitleTextField.placeholder = "Enter the subtitle"
-        }
-        
-        alertController.addAction(addAction)
-        alertController.addAction(cancelAction)
-        self.present(alertController, animated: true)
-
-    }
+//    func showAlertController(completion:@escaping (_ isAdded: Bool)->Void){
+//        let alertController = UIAlertController(title: "Add place", message: "Fill the all fields", preferredStyle: .alert)
+//        var isAdded = false
+//        
+//        let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
+//            isAdded = true
+//            self!.pinTitle = alertController.textFields![0].text ?? ""
+//            self!.pinSubtitle = alertController.textFields![1].text ?? ""
+//            completion(isAdded)
+//        }
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {_ in
+//            isAdded = false
+//            completion(isAdded)
+//        }
+//        
+//        alertController.addTextField {titleTextField in
+//            titleTextField.placeholder = "Enter the title"
+//        }
+//        
+//        alertController.addTextField {subTitleTextField in
+//            subTitleTextField.placeholder = "Enter the subtitle"
+//        }
+//        
+//        alertController.addAction(addAction)
+//        alertController.addAction(cancelAction)
+//        self.present(alertController, animated: true)
+//
+//    }
     
     func layout() {
         view.addSubview(mapView)
@@ -171,7 +185,7 @@ class ViewController: UIViewController {
 
 }
 
-extension ViewController: MKMapViewDelegate {
+extension MapView: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
         if annotation is MKUserLocation { return nil }
@@ -196,4 +210,23 @@ extension ViewController: MKMapViewDelegate {
         return annotationView
 
     }
+}
+
+
+extension MapView: UITableViewDelegate {
+    
+}
+
+
+extension MapView: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        return cell
+    }
+    
+    
 }

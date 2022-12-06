@@ -7,16 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		680ED732293F93E5004D02CD /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680ED731293F93E5004D02CD /* MapController.swift */; };
 		68F9AD8E29386A4700B69841 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9AD8D29386A4700B69841 /* AppDelegate.swift */; };
-		68F9AD9229386A4700B69841 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9AD9129386A4700B69841 /* ViewController.swift */; };
+		68F9AD9229386A4700B69841 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9AD9129386A4700B69841 /* MapView.swift */; };
 		68F9AD9729386A4700B69841 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68F9AD9629386A4700B69841 /* Assets.xcassets */; };
 		68F9AD9A29386A4700B69841 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 68F9AD9829386A4700B69841 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		680ED731293F93E5004D02CD /* MapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
 		68F9AD8A29386A4700B69841 /* PlacesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlacesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68F9AD8D29386A4700B69841 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		68F9AD9129386A4700B69841 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		68F9AD9129386A4700B69841 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		68F9AD9629386A4700B69841 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		68F9AD9929386A4700B69841 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		68F9AD9B29386A4700B69841 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -33,6 +35,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		680ED734293F9408004D02CD /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				68F9AD9629386A4700B69841 /* Assets.xcassets */,
+				68F9AD9829386A4700B69841 /* LaunchScreen.storyboard */,
+				68F9AD9B29386A4700B69841 /* Info.plist */,
+			);
+			name = Files;
+			sourceTree = "<group>";
+		};
+		680ED735293F9426004D02CD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		680ED736293F942C004D02CD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				68F9AD9129386A4700B69841 /* MapView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		680ED737293F9431004D02CD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				680ED731293F93E5004D02CD /* MapController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		68F9AD8129386A4700B69841 = {
 			isa = PBXGroup;
 			children = (
@@ -53,10 +88,10 @@
 			isa = PBXGroup;
 			children = (
 				68F9AD8D29386A4700B69841 /* AppDelegate.swift */,
-				68F9AD9129386A4700B69841 /* ViewController.swift */,
-				68F9AD9629386A4700B69841 /* Assets.xcassets */,
-				68F9AD9829386A4700B69841 /* LaunchScreen.storyboard */,
-				68F9AD9B29386A4700B69841 /* Info.plist */,
+				680ED735293F9426004D02CD /* Model */,
+				680ED736293F942C004D02CD /* View */,
+				680ED737293F9431004D02CD /* Controller */,
+				680ED734293F9408004D02CD /* Files */,
 			);
 			path = PlacesApp;
 			sourceTree = "<group>";
@@ -131,7 +166,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				68F9AD9229386A4700B69841 /* ViewController.swift in Sources */,
+				68F9AD9229386A4700B69841 /* MapView.swift in Sources */,
+				680ED732293F93E5004D02CD /* MapController.swift in Sources */,
 				68F9AD8E29386A4700B69841 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
