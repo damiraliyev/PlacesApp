@@ -28,8 +28,22 @@ class MapController: UIViewController {
         setupTapGesture()
         
         myMapView.segmententedControl.addTarget(self, action: #selector(segmentChosen), for: .primaryActionTriggered)
+         
+        setupBarButtonItem()
+       
         
         
+    }
+    
+    func setupBarButtonItem() {
+        let organizerBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(showTableView))
+        navigationItem.rightBarButtonItem = organizerBarButtonItem
+    }
+    
+    @objc func showTableView() {
+        myMapView.tableView.isHidden = !myMapView.tableView.isHidden
+        
+
     }
     
     @objc func segmentChosen(_ sender: UISegmentedControl) {
@@ -63,7 +77,9 @@ class MapController: UIViewController {
                 annotation.title = self!.myMapView.pinTitle
                 annotation.subtitle = self!.myMapView.pinSubtitle
                 self!.myMapView.mapView.addAnnotation(annotation)
-                self!.myMapView.title = self!.myMapView.pinTitle
+                self!.title = self!.myMapView.pinTitle
+                
+                self!.myMapView.tableView.reloadData()
             }
         }
     }

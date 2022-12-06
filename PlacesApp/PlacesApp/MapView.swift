@@ -48,8 +48,7 @@ class MapView: UIViewController {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.delegate = self
 //        setupTapGesture()
-    
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: nil)
+        
         
         setupContainerView()
         
@@ -61,10 +60,24 @@ class MapView: UIViewController {
         
     }
     
+    
+    
     func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.isHidden = true
+        
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = tableView.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+ 
+        tableView.backgroundColor = .clear
+        tableView.backgroundView = blurEffectView
+//
         
     }
     
@@ -75,11 +88,15 @@ class MapView: UIViewController {
 //
     func setupContainerView() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
+        setupBlurEffect(bluredView: containerView)
+    }
+    
+    func setupBlurEffect(bluredView: UIView) {
         let blurEffect = UIBlurEffect(style: .light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = containerView.bounds
+        blurEffectView.frame = bluredView.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        containerView.addSubview(blurEffectView)
+        bluredView.addSubview(blurEffectView)
     }
     
     func setupSegments() {
@@ -159,6 +176,9 @@ class MapView: UIViewController {
         view.addSubview(mapView)
         view.addSubview(containerView)
         view.addSubview(segmententedControl)
+        view.addSubview(tableView)
+        
+        
         
         NSLayoutConstraint.activate([
             mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -177,6 +197,13 @@ class MapView: UIViewController {
         NSLayoutConstraint.activate([
             segmententedControl.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             segmententedControl.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: containerView.topAnchor)
         ])
         
        
@@ -225,6 +252,23 @@ extension MapView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
+        var content = cell.defaultContentConfiguration()
+        content.text = "AAA"
+        content.secondaryText = "BBB"
+            
+        cell.contentConfiguration = content
+        
+        
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = cell.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+       
+        cell.backgroundColor = .clear
+        cell.backgroundView = blurEffectView
+        
         return cell
     }
     
