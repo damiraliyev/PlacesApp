@@ -24,6 +24,8 @@ class MapController: UIViewController {
     var index = -1
     var isForwarding = true
     
+    var annotations: [MKAnnotation] = []
+    
     override func viewDidLoad() {
         setup()
         
@@ -135,6 +137,7 @@ class MapController: UIViewController {
                 annotation.title = self!.pinTitle
                 annotation.subtitle = self!.pinSubtitle
                 self!.myMapView.mapView.addAnnotation(annotation)
+                self!.annotations.append(annotation)
                
                 
                 self!.long = annotation.coordinate.longitude
@@ -189,6 +192,13 @@ extension MapController: TableRowDelegate {
         self.index = index
         moveToAnnotation(direction: nil)
         myMapView.tableView.isHidden = true
+    }
+    
+    func placeAnnotationRemoved(placeIndex: Int) {
+        
+        myMapView.mapView.removeAnnotation(annotations[placeIndex])//        myMapView.mapView.removeAnnotat
+        annotations.remove(at: placeIndex)
+        print(myMapView.mapView.annotations.count)
     }
     
     

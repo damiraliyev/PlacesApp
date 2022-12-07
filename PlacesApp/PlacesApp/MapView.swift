@@ -11,6 +11,8 @@ import MapKit
 
 protocol TableRowDelegate: AnyObject {
     func rowPressed(index: Int)
+    
+    func placeAnnotationRemoved(placeIndex: Int)
 }
 
 class MapView: UIViewController {
@@ -271,6 +273,10 @@ extension MapView: MKMapViewDelegate {
         return annotationView
 
     }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        print("Callout tapped")
+    }
 }
 
 
@@ -279,7 +285,21 @@ extension MapView: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         tableRowDelegate?.rowPressed(index: indexPath.row)
-        print("AAA")
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            print("INDEXPATH", indexPath.row)
+            
+            places.remove(at: indexPath.row)
+            print("INDEXPATH", indexPath.row)
+            tableView.reloadData()
+            tableRowDelegate?.placeAnnotationRemoved(placeIndex: indexPath.row)
+        }
     }
 }
 
