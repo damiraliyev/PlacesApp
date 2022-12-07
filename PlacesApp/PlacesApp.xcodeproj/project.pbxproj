@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		680ED732293F93E5004D02CD /* MapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680ED731293F93E5004D02CD /* MapController.swift */; };
+		685B7D142940688100E2B39B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685B7D132940688100E2B39B /* Model.swift */; };
+		685B7D1629406BE800E2B39B /* Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685B7D1529406BE800E2B39B /* Factory.swift */; };
 		68F9AD8E29386A4700B69841 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9AD8D29386A4700B69841 /* AppDelegate.swift */; };
 		68F9AD9229386A4700B69841 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F9AD9129386A4700B69841 /* MapView.swift */; };
 		68F9AD9729386A4700B69841 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68F9AD9629386A4700B69841 /* Assets.xcassets */; };
@@ -16,6 +18,8 @@
 
 /* Begin PBXFileReference section */
 		680ED731293F93E5004D02CD /* MapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapController.swift; sourceTree = "<group>"; };
+		685B7D132940688100E2B39B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		685B7D1529406BE800E2B39B /* Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factory.swift; sourceTree = "<group>"; };
 		68F9AD8A29386A4700B69841 /* PlacesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlacesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68F9AD8D29386A4700B69841 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		68F9AD9129386A4700B69841 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
@@ -48,6 +52,7 @@
 		680ED735293F9426004D02CD /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				685B7D132940688100E2B39B /* Model.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -56,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				68F9AD9129386A4700B69841 /* MapView.swift */,
+				685B7D1529406BE800E2B39B /* Factory.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -169,6 +175,8 @@
 				68F9AD9229386A4700B69841 /* MapView.swift in Sources */,
 				680ED732293F93E5004D02CD /* MapController.swift in Sources */,
 				68F9AD8E29386A4700B69841 /* AppDelegate.swift in Sources */,
+				685B7D142940688100E2B39B /* Model.swift in Sources */,
+				685B7D1629406BE800E2B39B /* Factory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

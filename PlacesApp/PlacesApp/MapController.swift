@@ -13,11 +13,31 @@ class MapController: UIViewController {
     
     let myMapView = MapView()
     
+    var pinTitle = ""
+    var pinSubtitle = ""
+    
+    var long = CLLocationDegrees()
+    var latt = CLLocationDegrees()
+    
+    let zooming = 1500
+    
+    var index = -1
+    var isForwarding = true
+    
     override func viewDidLoad() {
         setup()
-        layout()
+        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(myMapView.backButton.frame.size.width)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print(myMapView.backButton.bounds.size.width)
+    }
     
     func setup() {
         
@@ -30,6 +50,11 @@ class MapController: UIViewController {
         myMapView.segmententedControl.addTarget(self, action: #selector(segmentChosen), for: .primaryActionTriggered)
          
         setupBarButtonItem()
+        
+        
+        myMapView.forwardButton.addTarget(self, action: #selector(forwardPressed), for: .primaryActionTriggered)
+        
+        myMapView.backButton.addTarget(self, action: #selector(backPressed), for: .primaryActionTriggered)
        
         
         
@@ -56,9 +81,48 @@ class MapController: UIViewController {
         }
     }
     
-    func layout() {
-        
+    @objc func forwardPressed() {
+
+        if myMapView.places.count != 0 {
+
+            var span = myMapView.mapView.region.span
+            
+            span.latitudeDelta /= 500;
+            span.longitudeDelta /= 500;
+            
+            myMapView.mapView.region.span=span;
+            myMapView.mapView.setRegion(myMapView.mapView.region, animated: false)
+            
+            index = (index + 1) % myMapView.places.count
+            myMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: myMapView.places[index].latitude, longitude: myMapView.places[index].longtitude), animated: false)
+            title = myMapView.places[index].title
+
+        }
     }
+    
+    @objc func backPressed() {
+        print("Index:", index)
+        
+        
+        if myMapView.places.count != 0{
+
+            var span = myMapView.mapView.region.span
+            
+            span.latitudeDelta /= 500;
+            span.longitudeDelta /= 500;
+            
+            myMapView.mapView.region.span=span;
+            myMapView.mapView.setRegion(myMapView.mapView.region, animated: false)
+            
+            
+            index = (index - 1) %% myMapView.places.count
+            print("MODULUS INDEX", index)
+            myMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: myMapView.places[index].latitude, longitude: myMapView.places[index].longtitude), animated: false)
+            title = myMapView.places[index].title            
+        }
+    }
+    
+    
     
     func setupTapGesture() {
         let longPressTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleTap))
@@ -74,11 +138,19 @@ class MapController: UIViewController {
             if isAdded {
                 let annotation = MKPointAnnotation()
                 annotation.coordinate = coordinate
-                annotation.title = self!.myMapView.pinTitle
-                annotation.subtitle = self!.myMapView.pinSubtitle
+                annotation.title = self!.pinTitle
+                annotation.subtitle = self!.pinSubtitle
                 self!.myMapView.mapView.addAnnotation(annotation)
-                self!.title = self!.myMapView.pinTitle
+               
                 
+                self!.long = annotation.coordinate.longitude
+                self!.latt = annotation.coordinate.latitude
+                
+                self!.myMapView.tableView.reloadData()
+                
+                let newPlace = Place(title: self!.pinTitle, subtitle: self!.pinSubtitle, longtitude: coordinate.longitude, latitude: coordinate.latitude)
+                
+                self!.myMapView.places.append(newPlace)
                 self!.myMapView.tableView.reloadData()
             }
         }
@@ -91,8 +163,8 @@ class MapController: UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
             isAdded = true
-            self!.myMapView.pinTitle = alertController.textFields![0].text ?? ""
-            self!.myMapView.pinSubtitle = alertController.textFields![1].text ?? ""
+            self!.pinTitle = alertController.textFields![0].text ?? ""
+            self!.pinSubtitle = alertController.textFields![1].text ?? ""
             completion(isAdded)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {_ in
@@ -114,4 +186,15 @@ class MapController: UIViewController {
 
     }
     
+}
+
+
+infix operator %%
+
+extension Int {
+    static  func %% (_ left: Int, _ right: Int) -> Int {
+        if left >= 0 { return left % right }
+        if left >= -right { return (left+right) }
+        return ((left % right)+right)%right
+    }
 }

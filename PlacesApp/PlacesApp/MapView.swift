@@ -11,6 +11,8 @@ import MapKit
 
 class MapView: UIViewController {
     
+    var places: [Place] = []
+    
     let mapView: MKMapView = {
         let map = MKMapView()
         
@@ -32,9 +34,11 @@ class MapView: UIViewController {
     let tableView = UITableView()
     
     
-    var pinTitle = ""
-    var pinSubtitle = ""
- 
+    let blurEffect = UIBlurEffect(style: .light)
+    
+    var forwardButton = UIButton()
+    var backButton = UIButton()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -57,7 +61,11 @@ class MapView: UIViewController {
         setupTableView()
         
 //        setupTapGesture()
+     
         
+        
+        forwardButton.translatesAutoresizingMaskIntoConstraints = false
+        backButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
     
@@ -69,8 +77,7 @@ class MapView: UIViewController {
         tableView.isHidden = true
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        
-        let blurEffect = UIBlurEffect(style: .light)
+
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = tableView.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -92,7 +99,7 @@ class MapView: UIViewController {
     }
     
     func setupBlurEffect(bluredView: UIView) {
-        let blurEffect = UIBlurEffect(style: .light)
+        
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = bluredView.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -178,6 +185,9 @@ class MapView: UIViewController {
         view.addSubview(segmententedControl)
         view.addSubview(tableView)
         
+        view.addSubview(forwardButton)
+        view.addSubview(backButton)
+        
         
         
         NSLayoutConstraint.activate([
@@ -206,7 +216,23 @@ class MapView: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: containerView.topAnchor)
         ])
         
-       
+        NSLayoutConstraint.activate([
+            
+            forwardButton.leadingAnchor.constraint(equalTo: segmententedControl.trailingAnchor),
+            forwardButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            forwardButton.centerYAnchor.constraint(equalTo: segmententedControl.centerYAnchor),
+            forwardButton.heightAnchor.constraint(equalToConstant: 50)
+
+        ])
+
+        NSLayoutConstraint.activate([
+            backButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            backButton.trailingAnchor.constraint(equalTo: segmententedControl.leadingAnchor),
+            backButton.centerYAnchor.constraint(equalTo: segmententedControl.centerYAnchor),
+            backButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+
     }
 
 
@@ -247,20 +273,21 @@ extension MapView: UITableViewDelegate {
 
 extension MapView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return places.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-        content.text = "AAA"
-        content.secondaryText = "BBB"
-            
+//        content.text = "AAA"
+//        content.secondaryText = "BBB"
+        content.text = places[indexPath.row].title
+        content.secondaryText = places[indexPath.row].subtitle
         cell.contentConfiguration = content
         
         
-        let blurEffect = UIBlurEffect(style: .light)
+        
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = cell.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
