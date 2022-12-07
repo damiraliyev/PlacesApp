@@ -16,3 +16,9 @@ struct Place {
     let longtitude: CLLocationDegrees
     let latitude: CLLocationDegrees
 }
+
+
+enum Direction {
+    case forward
+    case backward
+}

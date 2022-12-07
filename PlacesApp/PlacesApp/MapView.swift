@@ -9,6 +9,10 @@ import UIKit
 import MapKit
 
 
+protocol TableRowDelegate: AnyObject {
+    func rowPressed(index: Int)
+}
+
 class MapView: UIViewController {
     
     var places: [Place] = []
@@ -33,11 +37,15 @@ class MapView: UIViewController {
     
     let tableView = UITableView()
     
+    weak var tableRowDelegate: TableRowDelegate?
     
     let blurEffect = UIBlurEffect(style: .light)
     
     var forwardButton = UIButton()
     var backButton = UIButton()
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -267,7 +275,12 @@ extension MapView: MKMapViewDelegate {
 
 
 extension MapView: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        tableRowDelegate?.rowPressed(index: indexPath.row)
+        print("AAA")
+    }
 }
 
 
@@ -280,8 +293,7 @@ extension MapView: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         var content = cell.defaultContentConfiguration()
-//        content.text = "AAA"
-//        content.secondaryText = "BBB"
+
         content.text = places[indexPath.row].title
         content.secondaryText = places[indexPath.row].subtitle
         cell.contentConfiguration = content

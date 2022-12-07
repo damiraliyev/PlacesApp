@@ -56,6 +56,7 @@ class MapController: UIViewController {
         
         myMapView.backButton.addTarget(self, action: #selector(backPressed), for: .primaryActionTriggered)
        
+        myMapView.tableRowDelegate = self
         
         
     }
@@ -67,8 +68,6 @@ class MapController: UIViewController {
     
     @objc func showTableView() {
         myMapView.tableView.isHidden = !myMapView.tableView.isHidden
-        
-
     }
     
     @objc func segmentChosen(_ sender: UISegmentedControl) {
@@ -84,19 +83,7 @@ class MapController: UIViewController {
     @objc func forwardPressed() {
 
         if myMapView.places.count != 0 {
-
-            var span = myMapView.mapView.region.span
-            
-            span.latitudeDelta /= 500;
-            span.longitudeDelta /= 500;
-            
-            myMapView.mapView.region.span=span;
-            myMapView.mapView.setRegion(myMapView.mapView.region, animated: false)
-            
-            index = (index + 1) % myMapView.places.count
-            myMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: myMapView.places[index].latitude, longitude: myMapView.places[index].longtitude), animated: false)
-            title = myMapView.places[index].title
-
+            moveToAnnotation(direction: .forward)
         }
     }
     
@@ -105,21 +92,28 @@ class MapController: UIViewController {
         
         
         if myMapView.places.count != 0{
-
-            var span = myMapView.mapView.region.span
-            
-            span.latitudeDelta /= 500;
-            span.longitudeDelta /= 500;
-            
-            myMapView.mapView.region.span=span;
-            myMapView.mapView.setRegion(myMapView.mapView.region, animated: false)
-            
-            
-            index = (index - 1) %% myMapView.places.count
-            print("MODULUS INDEX", index)
-            myMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: myMapView.places[index].latitude, longitude: myMapView.places[index].longtitude), animated: false)
-            title = myMapView.places[index].title            
+            moveToAnnotation(direction: .backward)
         }
+    }
+    
+    func moveToAnnotation(direction: Direction?) {
+        var span = myMapView.mapView.region.span
+        
+        span.latitudeDelta /= 500;
+        span.longitudeDelta /= 500;
+        
+        myMapView.mapView.region.span=span;
+        myMapView.mapView.setRegion(myMapView.mapView.region, animated: false)
+        
+        if direction == .forward {
+            index = (index + 1) % myMapView.places.count
+        } else if direction == .backward {
+            index = (index - 1) %% myMapView.places.count
+        }
+        
+        
+        myMapView.mapView.setCenter(CLLocationCoordinate2D(latitude: myMapView.places[index].latitude, longitude: myMapView.places[index].longtitude), animated: false)
+        title = myMapView.places[index].title
     }
     
     
@@ -185,6 +179,18 @@ class MapController: UIViewController {
         self.present(alertController, animated: true)
 
     }
+    
+}
+
+
+
+extension MapController: TableRowDelegate {
+    func rowPressed(index: Int) {
+        self.index = index
+        moveToAnnotation(direction: nil)
+        myMapView.tableView.isHidden = true
+    }
+    
     
 }
 
