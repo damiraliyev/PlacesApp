@@ -15,6 +15,10 @@ protocol TableRowDelegate: AnyObject {
     func placeAnnotationRemoved(placeIndex: Int)
 }
 
+protocol CalloutDelegate: AnyObject {
+    func calloutPressed(annotationView: MKAnnotationView)
+}
+
 class MapView: UIViewController {
     
     var places: [Place] = []
@@ -41,11 +45,12 @@ class MapView: UIViewController {
     
     weak var tableRowDelegate: TableRowDelegate?
     
+    weak var calloutDelegate: CalloutDelegate?
+    
     let blurEffect = UIBlurEffect(style: .light)
     
     var forwardButton = UIButton()
     var backButton = UIButton()
-    
     
     
     
@@ -275,6 +280,8 @@ extension MapView: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
+        calloutDelegate?.calloutPressed(annotationView: view)
         
     }
 }

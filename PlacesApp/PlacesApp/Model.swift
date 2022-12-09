@@ -11,8 +11,8 @@ import MapKit
 
 
 struct Place {
-    let title: String
-    let subtitle: String
+    var title: String
+    var subtitle: String
     let longtitude: CLLocationDegrees
     let latitude: CLLocationDegrees
 }

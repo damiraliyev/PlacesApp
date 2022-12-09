@@ -8,10 +8,19 @@
 import Foundation
 import UIKit
 
+
+protocol InfoDoneDelegate: AnyObject {
+    func donePressed(title: String, subtitle: String, index: Int)
+}
+
 class PlaceInfoView: UIViewController {
     
     let placeTitleField = UITextField()
     let placeSubtitleField = UITextField()
+    
+    var indexOfAnnotation = 0
+ 
+    weak var infoDoneDelegate: InfoDoneDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +32,7 @@ class PlaceInfoView: UIViewController {
     
     
     func setup() {
+
         placeTitleField.translatesAutoresizingMaskIntoConstraints = false
         placeTitleField.backgroundColor = .white
         placeTitleField.layer.cornerRadius = 5
@@ -30,8 +40,19 @@ class PlaceInfoView: UIViewController {
         placeSubtitleField.translatesAutoresizingMaskIntoConstraints = false
         placeSubtitleField.backgroundColor = .white
         placeSubtitleField.layer.cornerRadius = 5
+        
+        setupNavBar()
     }
     
+    func setupNavBar() {
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
+    }
+    
+    @objc func doneButtonPressed() {
+        infoDoneDelegate?.donePressed(title: placeTitleField.text ?? "", subtitle: placeSubtitleField.text ?? "", index: indexOfAnnotation)
+        navigationController?.popViewController(animated: true)
+    }
     
     func layout() {
         view.addSubview(placeTitleField)

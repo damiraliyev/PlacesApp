@@ -24,7 +24,7 @@ class MapController: UIViewController {
     var index = -1
     var isForwarding = true
     
-    var annotations: [MKAnnotation] = []
+    var annotations: [MKPointAnnotation] = []
     
     override func viewDidLoad() {
         setup()
@@ -59,6 +59,8 @@ class MapController: UIViewController {
         myMapView.backButton.addTarget(self, action: #selector(backPressed), for: .primaryActionTriggered)
        
         myMapView.tableRowDelegate = self
+        myMapView.calloutDelegate = self
+        
         
         
     }
@@ -202,6 +204,29 @@ extension MapController: TableRowDelegate {
     }
     
     
+}
+
+extension MapController: CalloutDelegate {
+    func calloutPressed(annotationView: MKAnnotationView) {
+//        print(myMapView.mapView.annotations.index)
+        let placeInfoView = PlaceInfoView()
+        placeInfoView.infoDoneDelegate = self
+        self.navigationController?.pushViewController(placeInfoView, animated: true)
+        
+        placeInfoView.placeTitleField.text = annotationView.annotation?.title ?? ""
+        placeInfoView.placeSubtitleField.text = annotationView.annotation?.subtitle ?? ""
+        placeInfoView.indexOfAnnotation = Int(myMapView.places.firstIndex(where: {$0.latitude == annotationView.annotation?.coordinate.latitude && $0.longtitude == annotationView.annotation?.coordinate.longitude})!)
+    }
+}
+
+extension MapController: InfoDoneDelegate {
+    func donePressed(title: String, subtitle: String, index: Int) {
+        myMapView.places[index].title = title
+        myMapView.places[index].subtitle = subtitle
+        myMapView.tableView.reloadData()
+        self.annotations[index].title = title
+        self.annotations[index].subtitle = subtitle
+    }
 }
 
 
