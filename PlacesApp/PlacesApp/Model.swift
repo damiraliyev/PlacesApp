@@ -10,12 +10,12 @@ import UIKit
 import MapKit
 
 
-struct Place {
-    var title: String
-    var subtitle: String
-    let longtitude: CLLocationDegrees
-    let latitude: CLLocationDegrees
-}
+//struct Place {
+//    var title: String
+//    var subtitle: String
+//    let longtitude: Double
+//    let latitude: Double
+//}
 
 
 enum Direction {

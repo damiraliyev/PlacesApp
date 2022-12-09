@@ -8,10 +8,15 @@
 import Foundation
 import UIKit
 import MapKit
+import CoreData
 
 class MapController: UIViewController {
     
+    
+    
     let myMapView = MapView()
+    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var pinTitle = ""
     var pinSubtitle = ""
@@ -29,6 +34,18 @@ class MapController: UIViewController {
     override func viewDidLoad() {
         setup()
         
+        
+        loadItems()
+        
+        for place in myMapView.places {
+            let annotation = MKPointAnnotation()
+            annotation.title = place.title
+            annotation.subtitle = place.subtitle
+            annotation.coordinate.latitude = place.latitude
+            annotation.coordinate.longitude = place.longtitude
+            myMapView.mapView.addAnnotation(annotation)
+            annotations.append(annotation)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -141,13 +158,20 @@ class MapController: UIViewController {
                 self!.myMapView.mapView.addAnnotation(annotation)
                 self!.annotations.append(annotation)
                
-                
                 self!.long = annotation.coordinate.longitude
                 self!.latt = annotation.coordinate.latitude
                 
-                self!.myMapView.tableView.reloadData()
+//                self!.myMapView.tableView.reloadData()
                 
-                let newPlace = Place(title: self!.pinTitle, subtitle: self!.pinSubtitle, longtitude: coordinate.longitude, latitude: coordinate.latitude)
+                let newPlace = Place(context: self!.context)
+                newPlace.title = self!.pinTitle
+                newPlace.subtitle = self!.pinSubtitle
+                newPlace.longtitude = coordinate.longitude
+                newPlace.latitude = coordinate.latitude
+                
+                self!.savePlaces()
+                
+//                let newPlace = Place(title: self!.pinTitle, subtitle: self!.pinSubtitle, longtitude: coordinate.longitude, latitude: coordinate.latitude)
                 
                 self!.myMapView.places.append(newPlace)
                 self!.myMapView.tableView.reloadData()
@@ -162,8 +186,13 @@ class MapController: UIViewController {
         
         let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
             isAdded = true
+        
             self!.pinTitle = alertController.textFields![0].text ?? ""
             self!.pinSubtitle = alertController.textFields![1].text ?? ""
+            
+            if self!.pinTitle == "" {
+                self!.pinTitle = "Unnamed"
+            }
             completion(isAdded)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {_ in
@@ -185,6 +214,26 @@ class MapController: UIViewController {
 
     }
     
+    func savePlaces() {
+        do {
+            try context.save()
+        } catch {
+            print("Error while saving context \(error)")
+        }
+        
+        myMapView.tableView.reloadData()
+    }
+    
+    func loadItems() {
+        let request: NSFetchRequest<Place> = Place.fetchRequest()
+        
+        do {
+            myMapView.places = try context.fetch(request)
+        } catch {
+            print("Error while loading context \(error)")
+        }
+    }
+    
 }
 
 
@@ -198,8 +247,12 @@ extension MapController: TableRowDelegate {
     
     func placeAnnotationRemoved(placeIndex: Int) {
         
+        context.delete(myMapView.places[placeIndex])
+        myMapView.places.remove(at: placeIndex)
         myMapView.mapView.removeAnnotation(annotations[placeIndex])//        myMapView.mapView.removeAnnotat
-        annotations.remove(at: placeIndex)
+        savePlaces()
+        
+        self.annotations.remove(at: placeIndex)
         print(myMapView.mapView.annotations.count)
     }
     
@@ -220,6 +273,7 @@ extension MapController: CalloutDelegate {
 }
 
 extension MapController: InfoDoneDelegate {
+    
     func donePressed(title: String, subtitle: String, index: Int) {
         myMapView.places[index].title = title
         myMapView.places[index].subtitle = subtitle

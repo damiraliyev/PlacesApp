@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 
 protocol TableRowDelegate: AnyObject {
@@ -20,6 +21,9 @@ protocol CalloutDelegate: AnyObject {
 }
 
 class MapView: UIViewController {
+    
+    
+    
     
     var places: [Place] = []
     
@@ -301,8 +305,7 @@ extension MapView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             print("INDEXPATH", indexPath.row)
-            
-            places.remove(at: indexPath.row)
+
             print("INDEXPATH", indexPath.row)
             tableView.reloadData()
             tableRowDelegate?.placeAnnotationRemoved(placeIndex: indexPath.row)
