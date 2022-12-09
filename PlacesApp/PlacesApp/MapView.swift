@@ -275,7 +275,7 @@ extension MapView: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("Callout tapped")
+        
     }
 }
 
