@@ -56,7 +56,7 @@ class MapView: UIViewController {
     var forwardButton = UIButton()
     var backButton = UIButton()
     
-    
+    let noPlacesLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,21 +70,20 @@ class MapView: UIViewController {
     func setup() {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.delegate = self
-//        setupTapGesture()
-        
         
         setupContainerView()
         
         setupSegments()
         
         setupTableView()
-        
-//        setupTapGesture()
-     
-        
-        
+
         forwardButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        noPlacesLabel.translatesAutoresizingMaskIntoConstraints = false
+        noPlacesLabel.text = "No places"
+        noPlacesLabel.isHidden = true
+
     }
     
     
@@ -106,12 +105,7 @@ class MapView: UIViewController {
 //
         
     }
-    
-//    func setupTapGesture() {
-//        let longPressTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleTap))
-//        mapView.addGestureRecognizer(longPressTapGesture)
-//    }
-//
+
     func setupContainerView() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         setupBlurEffect(bluredView: containerView)
@@ -132,78 +126,16 @@ class MapView: UIViewController {
         segmententedControl.insertSegment(withTitle: "Hybrid", at: 2, animated: true)
         segmententedControl.backgroundColor = .white
         segmententedControl.selectedSegmentIndex = 0
-        
-//        segmententedControl.addTarget(self, action: #selector(segmentChosen), for: .primaryActionTriggered)
     }
-    
-//    @objc func segmentChosen(_ sender: UISegmentedControl) {
-//        switch segmententedControl.selectedSegmentIndex {
-//        case 0: mapView.mapType = MKMapType.standard
-//        case 1: mapView.mapType = MKMapType.satellite
-//        case 2: mapView.mapType = MKMapType.hybrid
-//        default:
-//            print("Something went wrong")
-//        }
-//    }
-    
-//    @objc func handleTap(gestureReconizer: UITapGestureRecognizer) {
-//        let location = gestureReconizer.location(in: mapView)
-//        let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
-//        
-//        showAlertController { [weak self] isAdded in
-//            if isAdded {
-//                let annotation = MKPointAnnotation()
-//                annotation.coordinate = coordinate
-//                annotation.title = self!.pinTitle
-//                annotation.subtitle = self!.pinSubtitle
-//                self!.mapView.addAnnotation(annotation)
-//                self!.title = self!.pinTitle
-//            }
-//        
-//           
-//
-//        }
-//        
-//        
-//       
-//        
-//    }
-    
-//    func showAlertController(completion:@escaping (_ isAdded: Bool)->Void){
-//        let alertController = UIAlertController(title: "Add place", message: "Fill the all fields", preferredStyle: .alert)
-//        var isAdded = false
-//        
-//        let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
-//            isAdded = true
-//            self!.pinTitle = alertController.textFields![0].text ?? ""
-//            self!.pinSubtitle = alertController.textFields![1].text ?? ""
-//            completion(isAdded)
-//        }
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) {_ in
-//            isAdded = false
-//            completion(isAdded)
-//        }
-//        
-//        alertController.addTextField {titleTextField in
-//            titleTextField.placeholder = "Enter the title"
-//        }
-//        
-//        alertController.addTextField {subTitleTextField in
-//            subTitleTextField.placeholder = "Enter the subtitle"
-//        }
-//        
-//        alertController.addAction(addAction)
-//        alertController.addAction(cancelAction)
-//        self.present(alertController, animated: true)
-//
-//    }
+
+
     
     func layout() {
         view.addSubview(mapView)
         view.addSubview(containerView)
         view.addSubview(segmententedControl)
         view.addSubview(tableView)
-        
+        view.addSubview(noPlacesLabel)
         view.addSubview(forwardButton)
         view.addSubview(backButton)
         
@@ -217,6 +149,11 @@ class MapView: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
+            noPlacesLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            noPlacesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -224,7 +161,8 @@ class MapView: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            segmententedControl.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            segmententedControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 64),
+            segmententedControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -64),
             segmententedControl.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
         
@@ -240,15 +178,15 @@ class MapView: UIViewController {
             forwardButton.leadingAnchor.constraint(equalTo: segmententedControl.trailingAnchor),
             forwardButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             forwardButton.centerYAnchor.constraint(equalTo: segmententedControl.centerYAnchor),
-            forwardButton.heightAnchor.constraint(equalToConstant: 50)
+            forwardButton.heightAnchor.constraint(equalToConstant: view.frame.size.width / 5)
 
         ])
 
         NSLayoutConstraint.activate([
-            backButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            backButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             backButton.trailingAnchor.constraint(equalTo: segmententedControl.leadingAnchor),
             backButton.centerYAnchor.constraint(equalTo: segmententedControl.centerYAnchor),
-            backButton.heightAnchor.constraint(equalToConstant: 50)
+            backButton.heightAnchor.constraint(equalToConstant: view.frame.size.width / 5)
         ])
         
 

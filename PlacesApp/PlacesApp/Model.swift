@@ -10,13 +10,6 @@ import UIKit
 import MapKit
 
 
-//struct Place {
-//    var title: String
-//    var subtitle: String
-//    let longtitude: Double
-//    let latitude: Double
-//}
-
 
 enum Direction {
     case forward

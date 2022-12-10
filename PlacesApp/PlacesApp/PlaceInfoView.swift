@@ -19,6 +19,9 @@ class PlaceInfoView: UIViewController {
     let placeSubtitleField = UITextField()
     
     var indexOfAnnotation = 0
+    
+    var initialTitle = ""
+    var initialSubtitle = ""
  
     weak var infoDoneDelegate: InfoDoneDelegate?
     
@@ -32,7 +35,8 @@ class PlaceInfoView: UIViewController {
     
     
     func setup() {
-
+        
+        title = "Edit"
         placeTitleField.translatesAutoresizingMaskIntoConstraints = false
         placeTitleField.backgroundColor = .white
         placeTitleField.layer.cornerRadius = 5
@@ -42,6 +46,9 @@ class PlaceInfoView: UIViewController {
         placeSubtitleField.layer.cornerRadius = 5
         
         setupNavBar()
+        
+        initialTitle = placeTitleField.text ?? "Unnamed"
+        initialSubtitle = placeSubtitleField.text ?? ""
     }
     
     func setupNavBar() {
@@ -50,7 +57,11 @@ class PlaceInfoView: UIViewController {
     }
     
     @objc func doneButtonPressed() {
-        infoDoneDelegate?.donePressed(title: placeTitleField.text ?? "", subtitle: placeSubtitleField.text ?? "", index: indexOfAnnotation)
+        if placeTitleField.text == "" {
+            placeTitleField.text = initialTitle
+        }
+        
+        infoDoneDelegate?.donePressed(title: placeTitleField.text!, subtitle: placeSubtitleField.text ?? "", index: indexOfAnnotation)
         navigationController?.popViewController(animated: true)
     }
     

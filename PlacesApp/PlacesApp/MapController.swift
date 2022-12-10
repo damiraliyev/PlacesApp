@@ -46,6 +46,8 @@ class MapController: UIViewController {
             myMapView.mapView.addAnnotation(annotation)
             annotations.append(annotation)
         }
+        
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,6 +91,9 @@ class MapController: UIViewController {
     
     @objc func showTableView() {
         myMapView.tableView.isHidden = !myMapView.tableView.isHidden
+        
+        noPlaceLabelRegulator()
+       
     }
     
     @objc func segmentChosen(_ sender: UISegmentedControl) {
@@ -161,8 +166,6 @@ class MapController: UIViewController {
                 self!.long = annotation.coordinate.longitude
                 self!.latt = annotation.coordinate.latitude
                 
-//                self!.myMapView.tableView.reloadData()
-                
                 let newPlace = Place(context: self!.context)
                 newPlace.title = self!.pinTitle
                 newPlace.subtitle = self!.pinSubtitle
@@ -170,9 +173,7 @@ class MapController: UIViewController {
                 newPlace.latitude = coordinate.latitude
                 
                 self!.savePlaces()
-                
-//                let newPlace = Place(title: self!.pinTitle, subtitle: self!.pinSubtitle, longtitude: coordinate.longitude, latitude: coordinate.latitude)
-                
+
                 self!.myMapView.places.append(newPlace)
                 self!.myMapView.tableView.reloadData()
             }
@@ -234,6 +235,15 @@ class MapController: UIViewController {
         }
     }
     
+    func noPlaceLabelRegulator() {
+        if myMapView.tableView.isHidden == false && myMapView.places.count == 0 {
+            myMapView.noPlacesLabel.isHidden = false
+        } else if myMapView.tableView.isHidden == true || myMapView.places.count != 0 {
+            myMapView.noPlacesLabel.isHidden = true
+        }
+        
+    }
+    
 }
 
 
@@ -249,10 +259,13 @@ extension MapController: TableRowDelegate {
         
         context.delete(myMapView.places[placeIndex])
         myMapView.places.remove(at: placeIndex)
-        myMapView.mapView.removeAnnotation(annotations[placeIndex])//        myMapView.mapView.removeAnnotat
+        myMapView.mapView.removeAnnotation(annotations[placeIndex])
+        
         savePlaces()
         
         self.annotations.remove(at: placeIndex)
+        
+        noPlaceLabelRegulator()
         print(myMapView.mapView.annotations.count)
     }
     
