@@ -21,13 +21,12 @@ class MapController: UIViewController {
     var pinTitle = ""
     var pinSubtitle = ""
     
-    var long = CLLocationDegrees()
-    var latt = CLLocationDegrees()
+//    var long = CLLocationDegrees()
+//    var latt = CLLocationDegrees()
     
-    let zooming = 1500
     
     var index = -1
-    var isForwarding = true
+
     
     var annotations: [MKPointAnnotation] = []
     
@@ -49,16 +48,7 @@ class MapController: UIViewController {
         
        
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print(myMapView.backButton.frame.size.width)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print(myMapView.backButton.bounds.size.width)
-    }
+
     
     func setup() {
         
@@ -71,7 +61,6 @@ class MapController: UIViewController {
         myMapView.segmententedControl.addTarget(self, action: #selector(segmentChosen), for: .primaryActionTriggered)
          
         setupBarButtonItem()
-        
         
         myMapView.forwardButton.addTarget(self, action: #selector(forwardPressed), for: .primaryActionTriggered)
         
@@ -163,8 +152,8 @@ class MapController: UIViewController {
                 self!.myMapView.mapView.addAnnotation(annotation)
                 self!.annotations.append(annotation)
                
-                self!.long = annotation.coordinate.longitude
-                self!.latt = annotation.coordinate.latitude
+//                self!.long = annotation.coordinate.longitude
+//                self!.latt = annotation.coordinate.latitude
                 
                 let newPlace = Place(context: self!.context)
                 newPlace.title = self!.pinTitle
@@ -262,7 +251,7 @@ extension MapController: TableRowDelegate {
         myMapView.mapView.removeAnnotation(annotations[placeIndex])
         
         savePlaces()
-        
+        title = ""
         self.annotations.remove(at: placeIndex)
         
         noPlaceLabelRegulator()

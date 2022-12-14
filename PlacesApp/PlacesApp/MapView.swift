@@ -22,9 +22,7 @@ protocol CalloutDelegate: AnyObject {
 
 class MapView: UIViewController {
     
-    
-    
-    
+
     var places: [Place] = []
     
     let mapView: MKMapView = {
@@ -212,7 +210,6 @@ extension MapView: MKMapViewDelegate {
             annotationView?.rightCalloutAccessoryView = detailButton
           
         } else {
-
             annotationView?.annotation = annotation
         }
         
