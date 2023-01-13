@@ -149,8 +149,8 @@ class MapController: UIViewController {
                 annotation.coordinate = coordinate
                 annotation.title = self!.pinTitle
                 annotation.subtitle = self!.pinSubtitle
-                self!.myMapView.mapView.addAnnotation(annotation)
-                self!.annotations.append(annotation)
+                self?.myMapView.mapView.addAnnotation(annotation)
+                self?.annotations.append(annotation)
                
 //                self!.long = annotation.coordinate.longitude
 //                self!.latt = annotation.coordinate.latitude
@@ -161,10 +161,10 @@ class MapController: UIViewController {
                 newPlace.longtitude = coordinate.longitude
                 newPlace.latitude = coordinate.latitude
                 
-                self!.savePlaces()
+                self?.savePlaces()
 
-                self!.myMapView.places.append(newPlace)
-                self!.myMapView.tableView.reloadData()
+                self?.myMapView.places.append(newPlace)
+                self?.myMapView.tableView.reloadData()
             }
         }
     }
@@ -177,11 +177,11 @@ class MapController: UIViewController {
         let addAction = UIAlertAction(title: "Add", style: .default) { [weak self] _ in
             isAdded = true
         
-            self!.pinTitle = alertController.textFields![0].text ?? ""
-            self!.pinSubtitle = alertController.textFields![1].text ?? ""
+            self?.pinTitle = alertController.textFields![0].text ?? ""
+            self?.pinSubtitle = alertController.textFields![1].text ?? ""
             
-            if self!.pinTitle == "" {
-                self!.pinTitle = "Unnamed"
+            if self?.pinTitle == "" {
+                self?.pinTitle = "Unnamed"
             }
             completion(isAdded)
         }
