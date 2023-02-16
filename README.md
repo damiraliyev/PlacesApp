@@ -1,5 +1,5 @@
 
-# Project Title
+# Places App
 
 Application for pinning and saving specific locations.
 
