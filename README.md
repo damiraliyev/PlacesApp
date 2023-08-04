@@ -18,7 +18,7 @@ Application for pinning and saving specific locations.
 
 **UIKit**
 
-**MapView**
+**MapKit**
 
 **CoreData**
 
